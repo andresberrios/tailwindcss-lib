@@ -1,8 +1,8 @@
-let i = 0
+let i = 0;
 
-module.exports = {
+export default {
   statSync: () => {
-    return { mtimeMs: ++i }
+    return { mtimeMs: ++i };
   },
-  readFileSync: (id) => self[id] || '',
-}
+  readFileSync: id => self[id] || ''
+};

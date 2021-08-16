@@ -1,12 +1,12 @@
-import parseCustomConfig from "./parseCustomConfig";
-import { VIRTUAL_SOURCE_PATH, VIRTUAL_HTML_FILENAME } from "./constants";
-import tailwindcss from "tailwindcss";
-import postcss from "postcss";
-import { nanoid } from "nanoid";
+import parseCustomConfig from './parseCustomConfig';
+import { VIRTUAL_SOURCE_PATH, VIRTUAL_HTML_FILENAME } from './constants';
+import tailwindcss from 'tailwindcss';
+import postcss from 'postcss';
+import { nanoid } from 'nanoid';
 
 const tailwindId = nanoid();
 
-let lastProcessedHtml = "";
+let lastProcessedHtml = '';
 
 export default (force = false) => {
   return async () => {
@@ -21,24 +21,19 @@ export default (force = false) => {
     lastProcessedHtml = self[VIRTUAL_HTML_FILENAME];
 
     let defaultConfig = {
-      mode: "jit",
+      mode: 'jit',
       purge: [VIRTUAL_HTML_FILENAME],
       theme: {},
-      plugins: [
-        require("@tailwindcss/forms"), 
-        require("@tailwindcss/typography"),
-        require("@tailwindcss/aspect-ratio"),
-        require("@tailwindcss/line-clamp")
-      ],
+      plugins: []
     };
 
     let customCss = '';
     document.querySelectorAll('style[type="postcss"]').forEach(styleTag => {
       customCss += styleTag.innerHTML;
-    })
+    });
 
     const result = await postcss([
-      tailwindcss({ ...defaultConfig, ...userConfig }),
+      tailwindcss({ ...defaultConfig, ...userConfig })
     ]).process(
       `
       @tailwind base;
@@ -47,14 +42,14 @@ export default (force = false) => {
       @tailwind utilities;
       `,
       {
-        from: VIRTUAL_SOURCE_PATH,
+        from: VIRTUAL_SOURCE_PATH
       }
     );
 
     let style = document.getElementById(tailwindId);
 
     if (style === null) {
-      style = document.createElement("style");
+      style = document.createElement('style');
       style.id = tailwindId;
       document.head.append(style);
     }
