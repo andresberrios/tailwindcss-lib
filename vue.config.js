@@ -4,14 +4,21 @@ const path = require('path');
 const fs = require('fs');
 
 const externals = {
-  resolve: 'self.resolve',
-  chokidar: 'self.chokidar',
-  purgecss: 'self.purgecss',
-  tmp: 'self.tmp'
+  // resolve: 'self.resolve',
+  // chokidar: 'self.chokidar',
+  // purgecss: 'self.purgecss',
+  // tmp: 'self.tmp'
 };
 
+const fakeModulePath = path.resolve(__dirname, 'src/modules/fs.js');
+
 const moduleOverrides = {
-  fs: path.resolve(__dirname, 'src/modules/fs.js')
+  fs: fakeModulePath,
+  resolve: fakeModulePath,
+  chokidar: fakeModulePath,
+  tmp: fakeModulePath,
+  purgecss: fakeModulePath,
+  '@fullhuman/postcss-purgecss': fakeModulePath
 };
 
 function getExternal(context, request, callback) {
@@ -23,7 +30,7 @@ function getExternal(context, request, callback) {
 
 const files = [
   {
-    pattern: /modern-noramlize/,
+    pattern: /modern-normalize/,
     file: require.resolve('modern-normalize')
   },
   {
