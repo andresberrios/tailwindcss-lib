@@ -8,9 +8,9 @@
   },
   "main": "dist/tailwindcss-jit-cdn.umd.min.js",
   "dependencies": {
+    "autoprefixer": "^10.3.1",
     "core-js": "^3.6.5",
     "modern-normalize": "^1.1.0",
-    "nanoid": "^3.1.22",
     "normalize.css": "^8.0.1",
     "postcss": "^8.1.6",
     "tailwindcss": "^2.2.0"
@@ -19,9 +19,9 @@
     "@vue/cli-plugin-babel": "~4.4.0",
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-service": "~4.4.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "@vue/eslint-config-prettier": "^6.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "simple-functional-loader": "^1.2.1"
   },
