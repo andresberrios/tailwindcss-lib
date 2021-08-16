@@ -17,7 +17,7 @@ const defaultConfig = {
 
 export default class Tailwind {
   constructor(config = {}, postcssPlugins = { before: [], after: [] }) {
-    this.config = { ...defaultConfig, ...config };
+    this.config = { ...defaultConfig, ...config, mode: 'jit' };
     postcssPlugins.before = postcssPlugins.before ?? [];
     postcssPlugins.after = postcssPlugins.after ?? [];
     this.postcssPlugins = postcssPlugins;
