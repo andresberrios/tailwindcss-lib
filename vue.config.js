@@ -56,7 +56,8 @@ module.exports = {
     config.module.rules.push({
       test: require.resolve('tailwindcss/node_modules/glob-parent'),
       use: [
-        createLoader(() => {
+        // eslint-disable-next-line prefer-arrow-callback
+        createLoader(function() {
           return `module.exports = () => ''`;
         })
       ]
@@ -65,7 +66,8 @@ module.exports = {
     config.module.rules.push({
       test: require.resolve('is-glob'),
       use: [
-        createLoader(() => {
+        // eslint-disable-next-line prefer-arrow-callback
+        createLoader(function() {
           return `module.exports = () => false`;
         })
       ]
@@ -74,7 +76,8 @@ module.exports = {
     config.module.rules.push({
       test: require.resolve('tailwindcss/node_modules/fast-glob'),
       use: [
-        createLoader(() => {
+        // eslint-disable-next-line prefer-arrow-callback
+        createLoader(function() {
           return `module.exports = {
             sync: (patterns) => [].concat(patterns)
           }`;
@@ -84,14 +87,16 @@ module.exports = {
 
     config.module.rules.push({
       test: require.resolve('tailwindcss/lib/jit/processTailwindFeatures.js'),
-      use: createLoader(source => {
+      // eslint-disable-next-line prefer-arrow-callback
+      use: createLoader(function(source) {
         return source.replace(`let warned = false;`, `let warned = true;`);
       })
     });
 
     config.module.rules.push({
       test: require.resolve('tailwindcss/lib/plugins/preflight.js'),
-      use: createLoader(source => {
+      // eslint-disable-next-line prefer-arrow-callback
+      use: createLoader(function(source) {
         return source.replace(/_fs\.default\.readFileSync\(.*?'utf8'\)/g, m => {
           for (let i = 0; i < files.length; i++) {
             if (files[i].pattern.test(m)) {

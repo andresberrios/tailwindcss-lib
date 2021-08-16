@@ -1,4 +1,2 @@
-export default {
-  VIRTUAL_SOURCE_PATH: '/sourcePath',
-  VIRTUAL_HTML_FILENAME: '/htmlInput'
-};
+export const VIRTUAL_SOURCE_PATH = '/sourcePath';
+export const VIRTUAL_HTML_FILENAME = '/htmlInput';
