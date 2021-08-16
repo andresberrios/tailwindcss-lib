@@ -6,9 +6,13 @@
     "build": "vue-cli-service build --target lib --name tailwindcss-lib src/main.js",
     "lint": "vue-cli-service lint"
   },
+  "files": [
+    "dist",
+    "types"
+  ],
   "main": "dist/tailwindcss-lib.umd.min.js",
+  "types": "types/tailwindcss-lib.d.ts",
   "dependencies": {
-    "autoprefixer": "^10.3.1",
     "core-js": "^3.6.5",
     "modern-normalize": "^1.1.0",
     "normalize.css": "^8.0.1",

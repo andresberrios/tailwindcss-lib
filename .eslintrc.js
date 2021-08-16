@@ -16,5 +16,6 @@ module.exports = {
     eqeqeq: ['error', 'always'],
     'max-params': ['error', 3],
     'prefer-arrow-callback': 'error'
-  }
+  },
+  ignorePatterns: ['types/**/*.d.ts']
 };

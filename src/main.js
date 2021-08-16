@@ -4,7 +4,6 @@ import colors from 'tailwindcss/colors';
 
 import postcss from 'postcss';
 import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
 
 const VIRTUAL_HTML_FILENAME = '/tailwindVirtualHtmlInput';
 
@@ -17,38 +16,33 @@ const defaultConfig = {
 };
 
 export default class Tailwind {
-  constructor(config = {}, customCss = '') {
+  constructor(config = {}, postcssPlugins = { before: [], after: [] }) {
     this.config = { ...defaultConfig, ...config };
-    this.customCss = customCss;
+    postcssPlugins.before = postcssPlugins.before ?? [];
+    postcssPlugins.after = postcssPlugins.after ?? [];
+    this.postcssPlugins = postcssPlugins;
   }
 
-  async process(htmlContent = '', classes = []) {
-    self[VIRTUAL_HTML_FILENAME] = htmlContent;
+  async process({ html = '', css = '', classes = [] }) {
+    self[VIRTUAL_HTML_FILENAME] = html;
 
     const result = await postcss([
+      ...this.postcssPlugins.before,
       tailwindcss({
         ...this.config,
         ...{ purge: [VIRTUAL_HTML_FILENAME], safelist: classes }
       }),
-      autoprefixer
+      ...this.postcssPlugins.after
     ]).process(
       `
       @tailwind base;
       @tailwind components;
-      ${this.customCss}
+      ${css}
       @tailwind utilities;
       `,
       { from: '/virtualSourcePath', map: false }
     );
 
     return result.css;
-  }
-
-  async processClasses(classes) {
-    return this.process('', classes);
-  }
-
-  async processHtml(htmlContent) {
-    return this.process(htmlContent, []);
   }
 }
