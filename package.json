@@ -9,7 +9,7 @@
     "url": "https://github.com/andresberrios/tailwindcss-lib",
     "type": "git"
   },
-  "version": "0.2.1",
+  "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve --target lib --name tailwindcss-lib src/main.js",
     "build": "vue-cli-service build --target lib --name tailwindcss-lib src/main.js",
