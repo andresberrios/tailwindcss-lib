@@ -9,10 +9,10 @@ declare module 'tailwindcss-lib' {
   
   export default class Tailwind {
     constructor(
-      config: TailwindConfig,
-      postcssPlugins: { before?: unknown[], after?: unknown[] }
+      config?: TailwindConfig,
+      postcssPlugins?: { before?: unknown[], after?: unknown[] }
     );
   
-    process(input: { html: string, css: string, classes: string[] }): Promise<string>;
+    process(input: { html?: string, css?: string, classes?: string[] }): Promise<string>;
   }
 }
