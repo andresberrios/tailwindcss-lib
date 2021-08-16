@@ -1,5 +1,14 @@
 {
   "name": "tailwindcss-lib",
+  "author": {
+    "email": "andres.berrios.j@gmail.com",
+    "name": "Andres Berrios",
+    "url": "https://github.com/andresberrios"
+  },
+  "repository": {
+    "url": "https://github.com/andresberrios/tailwindcss-lib",
+    "type": "git"
+  },
   "version": "0.1.0",
   "scripts": {
     "serve": "vue-cli-service serve --target lib --name tailwindcss-lib src/main.js",
