@@ -2,7 +2,6 @@ declare module 'tailwindcss-lib' {
   export interface TailwindConfig {
     mode?: 'jit',
     purge?: string[],
-    safelist?: string[],
     theme?: unknown,
     plugins?: unknown[]
   }

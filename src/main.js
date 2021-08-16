@@ -10,7 +10,6 @@ const VIRTUAL_HTML_FILENAME = '/tailwindVirtualHtmlInput';
 const defaultConfig = {
   mode: 'jit',
   purge: [],
-  safelist: [],
   theme: {},
   plugins: []
 };
@@ -24,13 +23,13 @@ export default class Tailwind {
   }
 
   async process({ html = '', css = '', classes = [] }) {
-    self[VIRTUAL_HTML_FILENAME] = html;
+    self[VIRTUAL_HTML_FILENAME] = `${html} - ${classes.join(' ')}`;
 
     const result = await postcss([
       ...this.postcssPlugins.before,
       tailwindcss({
         ...this.config,
-        ...{ purge: [VIRTUAL_HTML_FILENAME], safelist: classes }
+        purge: [VIRTUAL_HTML_FILENAME]
       }),
       ...this.postcssPlugins.after
     ]).process(
