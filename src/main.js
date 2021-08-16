@@ -23,14 +23,12 @@ export default class Tailwind {
   }
 
   async process({ html = '', css = '', classes = [] }) {
-    // self[VIRTUAL_HTML_FILENAME] = `${html} - ${classes.join(' ')}`;
     self[VIRTUAL_HTML_FILENAME] = html;
 
     const result = await postcss([
       ...this.postcssPlugins.before,
       tailwindcss({
         ...this.config,
-        // purge: [VIRTUAL_HTML_FILENAME]
         purge: { content: [VIRTUAL_HTML_FILENAME], safelist: classes }
       }),
       ...this.postcssPlugins.after
