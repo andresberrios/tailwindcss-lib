@@ -1,6 +1,6 @@
 {
   "name": "tailwindcss-lib",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "scripts": {
     "serve": "vue-cli-service serve --target lib --name tailwindcss-lib src/main.js",
     "build": "vue-cli-service build --target lib --name tailwindcss-lib src/main.js",
@@ -10,7 +10,8 @@
     "dist",
     "types"
   ],
-  "main": "dist/tailwindcss-lib.umd.min.js",
+  "main": "dist/tailwindcss-lib.common.js",
+  "type": "commonjs",
   "types": "types/tailwindcss-lib.d.ts",
   "dependencies": {
     "core-js": "^3.6.5",
