@@ -2,13 +2,10 @@ import postcss, { AcceptedPlugin } from 'postcss';
 import type { Config } from 'tailwindcss';
 import tailwindcss from './tailwindcss-plugin';
 
-// import process from 'process';
-// (window as any).process = process;
-
 const defaultConfig: Config = {
   mode: 'jit',
   content: [],
-  theme: {},
+  theme: { extend: {} },
   plugins: []
 };
 

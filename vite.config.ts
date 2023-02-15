@@ -1,54 +1,80 @@
 import { defineConfig } from 'vite'
+import inject from '@rollup/plugin-inject'
+import stdLibBrowser from 'node-stdlib-browser'
+import { createRequire } from 'module';
+import { readFile } from 'fs/promises'
 
-const external = [
-  // "lightningcss",
-  // "browserslist",
-  // "@tailwindcss/oxide",
-  // "fast-glob"
-];
+const require = createRequire(import.meta.url);
+const empty = require.resolve('./src/stubs/empty.ts');
+const browserShimsPath = require.resolve('node-stdlib-browser/helpers/esbuild/shim');
 
-const empty = new URL('./stubs/empty.js', import.meta.url).pathname;
+let preflightCss = await readFile(require.resolve('tailwindcss/lib/css/preflight.css'), 'utf8');
+preflightCss = '`' + preflightCss.replaceAll('`', '\\`') + '`'
 
-/**
- * OK, maybe better try using browserify...
- */
+function embedPreflight(source: string) {
+  return source.replace(
+    '_fs.default.readFileSync(_path.join(__dirname, "./css/preflight.css"), "utf8")',
+    preflightCss
+  );
+}
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   build: {
     lib: {
-      entry: './lib/index.ts',
+      entry: './src/index.ts',
       name: 'TailwindCssLib',
       fileName: 'tailwindcss-lib'
-    },
-    rollupOptions: {
-      external
     }
   },
   define: {
-    'process.env.OXIDE': 'false',
-    'env.OXIDE': 'false'
+    // 'process.env.OXIDE': 'false',
+    // 'env.OXIDE': 'false',
   },
   resolve: {
     alias: {
+      ...stdLibBrowser,
+      'lightningcss': empty,
+      'browserslist': empty,
       '@tailwindcss/oxide': empty,
-      // 'lightningcss': empty,
-      // 'browserslist': empty,
-      // 'fast-glob': empty,
-      // './oxide/postcss-plugin': './plugin',
-
-      // process: 'process/browser',
-      'fast-glob': './lib/stubs/fast-glob.ts',
-      os: 'node_modules/@jspm/core/nodelibs/browser/os.js',
-      path: 'node_modules/@jspm/core/nodelibs/browser/path.js',
-      url: 'node_modules/@jspm/core/nodelibs/browser/url.js',
-      fs: 'node_modules/@jspm/core/nodelibs/browser/fs.js',
       'source-map-js': 'node_modules/source-map-js/source-map.js',
+      'fast-glob': require.resolve('./src/stubs/fast-glob.ts'),
     },
   },
+  plugins: [
+    {
+      ...inject({
+        global: [browserShimsPath, 'global'],
+        process: [browserShimsPath, 'process'],
+        Buffer: [browserShimsPath, 'Buffer'],
+        sourceMap: command === 'serve' // This doesn't seem to fix the issue
+      })
+    },
+    // {
+    //   name: 'preflight-fix',
+    //   transform(code, id) {
+    //     // console.log(id);
+    //     if (id.includes('corePlugins')) {
+    //       console.log('YEAH', id);
+    //       return embedPreflight(code);
+    //     }
+    //     return null;
+    //   }
+    // }
+  ],
   optimizeDeps: {
-    exclude: external
-  },
-  // ssr: {
-  //   external
-  // }
-})
+    include: ['buffer', 'process'],
+    esbuildOptions: {
+      plugins: [
+        {
+          name: 'preflight-fix-esbuild',
+          setup(build) {
+            build.onLoad({ filter: /tailwindcss.*corePlugins/ }, async (args) => {
+              const source = await readFile(args.path, 'utf8');
+              return { contents: embedPreflight(source) };
+            })
+          },
+        }
+      ]
+    }
+  }
+}));
