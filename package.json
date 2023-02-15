@@ -9,39 +9,31 @@
     "url": "https://github.com/andresberrios/tailwindcss-lib",
     "type": "git"
   },
-  "version": "1.0.0",
-  "scripts": {
-    "serve": "vue-cli-service serve --target lib --name tailwindcss-lib src/main.js",
-    "build": "vue-cli-service build --target lib --name tailwindcss-lib src/main.js",
-    "lint": "vue-cli-service lint"
-  },
+  "version": "1.1.0",
+  "type": "module",
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
-  "main": "dist/tailwindcss-lib.common.js",
-  "type": "commonjs",
-  "types": "types/tailwindcss-lib.d.ts",
-  "dependencies": {
-    "core-js": "^3.6.5",
-    "modern-normalize": "^1.1.0",
-    "normalize.css": "^8.0.1",
-    "postcss": "^8.1.6",
-    "tailwindcss": "^2.2.0"
+  "main": "./dist/tailwindcss-lib.umd.cjs",
+  "module": "./dist/tailwindcss-lib.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./index.d.ts",
+    "import": "./dist/tailwindcss-lib.js",
+    "require": "./dist/tailwindcss-lib.umd.cjs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "simple-functional-loader": "^1.2.1"
+    "typescript": "^4.9.4",
+    "vite": "^4.0.4"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  "dependencies": {
+    "@jspm/core": "github:jspm/core",
+    "postcss": "^8.4.21",
+    "process": "^0.11.10",
+    "tailwindcss": "^3.2.6"
+  }
 }
