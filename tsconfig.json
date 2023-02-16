@@ -23,11 +23,7 @@
   },
   "include": [
     "src",
+    "demo",
     "vite.config.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.demo.json"
-    }
   ]
 }

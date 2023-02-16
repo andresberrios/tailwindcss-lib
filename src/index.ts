@@ -1,6 +1,6 @@
 import postcss, { AcceptedPlugin } from 'postcss';
 import type { Config } from 'tailwindcss';
-import tailwindcss from './tailwindcss-plugin';
+import tailwindcss from './lib/tailwindcss-plugin';
 
 const defaultConfig: Config = {
   mode: 'jit',

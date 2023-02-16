@@ -5,7 +5,7 @@ const html = `
 `
 
 const tailwind = new Tailwind();
-const css = await tailwind.process({ html, classes: ['bg-blue'] })
+const css = await tailwind.process({ html })
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = html;
 
