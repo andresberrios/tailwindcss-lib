@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import inject from '@rollup/plugin-inject'
 import stdLibBrowser from 'node-stdlib-browser'
-import { createRequire } from 'module';
+import { createRequire } from 'module'
 import { readFile } from 'fs/promises'
 
 const require = createRequire(import.meta.url);
@@ -27,8 +27,8 @@ export default defineConfig(({ command }) => ({
     }
   },
   define: {
-    // 'process.env.OXIDE': 'false',
-    // 'env.OXIDE': 'false',
+    'process.env.OXIDE': 'false',
+    'env.OXIDE': 'false'
   },
   resolve: {
     alias: {
@@ -42,37 +42,47 @@ export default defineConfig(({ command }) => ({
   },
   plugins: [
     {
-      ...inject({
-        global: [browserShimsPath, 'global'],
-        process: [browserShimsPath, 'process'],
-        Buffer: [browserShimsPath, 'Buffer'],
-        sourceMap: command === 'serve' // This doesn't seem to fix the issue
-      })
+      name: 'wrapped-inject',
+      enforce: 'post',
+      async transform(code, id) {
+        const original = inject({
+          global: [browserShimsPath, 'global'],
+          process: [browserShimsPath, 'process'],
+          Buffer: [browserShimsPath, 'Buffer'],
+          sourceMap: command === 'serve'
+        });
+        if (typeof original.transform !== 'function') {
+          throw new TypeError("Expected inject's transform handler to be a function");
+        }
+        const result = await original.transform.call(this, code, id);
+        if (result && typeof result !== 'string') {
+          delete result.map;
+        }
+        return result;
+      }
     },
-    // {
-    //   name: 'preflight-fix',
-    //   transform(code, id) {
-    //     // console.log(id);
-    //     if (id.includes('corePlugins')) {
-    //       console.log('YEAH', id);
-    //       return embedPreflight(code);
-    //     }
-    //     return null;
-    //   }
-    // }
+    {
+      name: 'preflight-fix',
+      transform(code, id) {
+        if (id.includes('tailwindcss') && id.includes('corePlugins')) {
+          return embedPreflight(code);
+        }
+        return null;
+      }
+    }
   ],
   optimizeDeps: {
     include: ['buffer', 'process'],
     esbuildOptions: {
       plugins: [
         {
-          name: 'preflight-fix-esbuild',
+          name: 'preflight-fix',
           setup(build) {
             build.onLoad({ filter: /tailwindcss.*corePlugins/ }, async (args) => {
               const source = await readFile(args.path, 'utf8');
               return { contents: embedPreflight(source) };
             })
-          },
+          }
         }
       ]
     }
